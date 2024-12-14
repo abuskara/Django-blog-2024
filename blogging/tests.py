@@ -3,8 +3,11 @@ import datetime
 
 from django.contrib.auth.models import User
 from blogging.models import Post, Category
+
+
 class PostModelTest(TestCase):
-    fixtures = ['blogging_test_fixture.json']
+    fixtures = ["blogging_test_fixture.json"]
+
     def setUp(self):
         self.user = User.objects.get(pk=1)
 
@@ -14,40 +17,44 @@ class PostModelTest(TestCase):
         actual = str(p1)
         self.assertEqual(expected, actual)
 
+
 class CategoryTestCase(TestCase):
 
     def test_string_representation(self):
-        expected ='A Category'
-        category1=Category(name=expected)
+        expected = "A Category"
+        category1 = Category(name=expected)
         actual = str(category1)
         self.assertEqual(expected, actual)
 
+
 class FrontendTestCase(TestCase):
-    fixtures = ['blogging_test_fixture.json',]
+    fixtures = [
+        "blogging_test_fixture.json",
+    ]
 
     def setUp(self):
-        self.now=datetime.datetime.now()
-        self.timedelta=datetime.timedelta(15)
+        self.now = datetime.datetime.now()
+        self.timedelta = datetime.timedelta(15)
         author = User.objects.get(pk=1)
-        for count in range(1,11):
-            post = Post(title=f"Post {count} Title", text='foo', author=author)
+        for count in range(1, 11):
+            post = Post(title=f"Post {count} Title", text="foo", author=author)
             if count < 6:
-                pubdate= self.now - self.timedelta * count
+                pubdate = self.now - self.timedelta * count
                 post.published_date = pubdate
             post.save()
 
     def test_list_only_published(self):
-        resp = self.client.get('/')
+        resp = self.client.get("/")
         resp_text = resp.content.decode(resp.charset)
         print(resp_text)  # Debugging line to see the actual response content
-        self.assertTrue('My Cool Blog Posts' in resp_text)
+        self.assertTrue("My Cool Blog Posts" in resp_text)
         for count in range(1, 11):
             title = f"Post {count} Title"
             if count < 6:
                 self.assertContains(resp, title, count=1)
             else:
                 self.assertNotContains(resp, title)
-                '''
+                """
     def test_details_only_unpublished(self):
         for count in range(1, 11):
             title = f"Post {count} Title"
@@ -58,11 +65,4 @@ class FrontendTestCase(TestCase):
                 self.assertContains(resp,title)
             else:
                 self.assertEqual(resp.status_code, 404)
-                '''
-
-
-
-
-
-
-
+                """
