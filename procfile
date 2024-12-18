@@ -1,2 +1,2 @@
 release: python3 manage.py migrate
-web: gunicorn django_blog.wsgi.py
+web: gunicorn django_blog-2024.wsgi.py
