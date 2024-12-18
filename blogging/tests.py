@@ -47,7 +47,7 @@ class FrontendTestCase(TestCase):
         resp = self.client.get("/")
         resp_text = resp.content.decode(resp.charset)
         print(resp_text)  # Debugging line to see the actual response content
-        self.assertTrue("My Cool Blog Posts" in resp_text)
+        self.assertTrue("My Cool Heroku Blog Posts" in resp_text)
         for count in range(1, 11):
             title = f"Post {count} Title"
             if count < 6:
